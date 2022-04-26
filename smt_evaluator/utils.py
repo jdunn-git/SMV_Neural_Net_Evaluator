@@ -19,6 +19,9 @@ class NN_Results:
 		self.nn_output = nn_output
 		self.nn_input = nn_input
 		self.nn_ho_weights = nn_ho_weights
+		self.nn_ho_weights_rounded = []
+		for weight in nn_ho_weights:
+			self.nn_ho_weights_rounded.append(round(weight))
 		self.training_iterations = training_iterations
 
 	def set_nn_output(self, num):
@@ -38,6 +41,7 @@ class NN_Results:
 		print(f"\tAfter {self.training_iterations} training iterations...")
 		print(f"\tinput: {self.nn_input}")
 		print(f"\thidden-output weights: {self.nn_ho_weights}")
+		print(f"\trounded hidden-output weights: {self.nn_ho_weights_rounded}")
 		print(f"\toutput: {self.nn_output}")
 		print("----------------------------------------------")
 

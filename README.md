@@ -2,11 +2,11 @@ This repo holds code to evaluator and train a neural net in Python, as well as a
 
 The nerual net used by this repo has drawn inspiration from many sources areound the web, such as:
 
-> https://visualstudiomagazine.com/articles/2019/07/01/modern-neural-networks.aspx
+https://visualstudiomagazine.com/articles/2019/07/01/modern-neural-networks.aspx
 
 and
 
->https://realpython.com/python-ai-neural-network/
+https://realpython.com/python-ai-neural-network/
 
 
 The neural net certainly isn't perfect, but for the verification problem I was attempting to solve it didn't need to be. Instead, I merely needed to meet two criteria:

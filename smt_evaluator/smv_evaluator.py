@@ -247,6 +247,7 @@ def main():
                 output = nn.eval(new_normalized_color)[0]
                 output_weights = nn.get_output_weights()
                 result = utils.NN_Results(output, new_normalized_color, output_weights, trainings_per_loop * count)
+                print("For completeness sake, printing the output of the final test with the adjusted input...")
                 result.print()
 
                 break

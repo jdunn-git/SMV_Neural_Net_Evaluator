@@ -90,8 +90,14 @@ class NeuralNetwork:
 				if not training and utils.debug:
 					print(f"\nh_nodes[{j}]: {self.h_nodes[j]}")
 					print(f"\nho_weights[{j}, {k}]: {self.ho_weights[j, k]}")
-				self.o_sums[k] += self.h_nodes[j] * self.ho_weights[j,k]
+					print(f"\nrounded ho_weights[{j}, {k}]: {round(self.ho_weights[j, k])}")
+				if training:
+					self.o_sums[k] += self.h_nodes[j] * self.ho_weights[j,k]
+				else:
+					# If we are not training, then round the hidden output weights to be in line with the smv representation
+					self.o_sums[k] += self.h_nodes[j] * round(self.ho_weights[j, k])
 			self.o_sums[k] += self.o_biases[k]
+
 		if not training and utils.debug:
 			print("\nPre-activation output bias values: ")
 			utils.show_vec(self.o_biases, 8, 4, len(self.o_biases))

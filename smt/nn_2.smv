@@ -6,8 +6,8 @@ MODULE main
     h1_out : 0..100;
     h2_out : 0..100;
 
-  DEFINE h1_out_weight := 16;
-  DEFINE h2_out_weight := 4;
+  DEFINE h1_out_weight := 17;
+  DEFINE h2_out_weight := 3;
 
   DEFINE h1_in1 := 200;
   DEFINE h1_in2 := 0;
@@ -84,6 +84,6 @@ MODULE main
 
 -- Plugging in some training data now in a templatized way
 INVARSPEC
-  (mode = done) -> output > 64
+  (mode = done) -> output > 45
 
 
