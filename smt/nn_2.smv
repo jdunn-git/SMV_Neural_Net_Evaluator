@@ -1,0 +1,89 @@
+MODULE main
+  VAR
+    mode : {h1, h2, out, done};
+    output : 0..100;
+
+    h1_out : 0..100;
+    h2_out : 0..100;
+
+  DEFINE h1_out_weight := 16;
+  DEFINE h2_out_weight := 4;
+
+  DEFINE h1_in1 := 200;
+  DEFINE h1_in2 := 0;
+  DEFINE h1_in3 := 15;
+  DEFINE h2_in1 := 200;
+  DEFINE h2_in2 := 0;
+  DEFINE h2_in3 := 15;
+
+  DEFINE h1_in1_weight := -1;
+  DEFINE h1_in2_weight := 0;
+  DEFINE h1_in3_weight := 0;
+
+  DEFINE h2_in1_weight := 0;
+  DEFINE h2_in2_weight := 0;
+  DEFINE h2_in3_weight := 1;
+
+  DEFINE h1_bias := 1;
+  DEFINE h2_bias := 1;
+  DEFINE out_bias := 1;
+
+  ASSIGN
+  	next(mode) := case
+  				mode = h1 : h2; -- transitioning from h1 to h2 so that both can be evaluated in a transition system
+  				mode = h2 : out;
+  				mode = out : done;
+  				TRUE : mode; -- stay the same
+  				esac;
+	  next(h1_out) := case
+				mode = h1 & ((h1_in1 * h1_in1_weight) + (h1_in2 * h1_in2_weight) + (h1_in3 * h1_in3_weight) + h1_bias) <= 0 : 0;
+        mode = h1 & ((h1_in1 * h1_in1_weight) + (h1_in2 * h1_in2_weight) + (h1_in3 * h1_in3_weight) + h1_bias) > 500 : ((h1_in1 * h1_in1_weight) + (h1_in2 * h1_in2_weight) + (h1_in3 * h1_in3_weight) + h1_bias);
+                TRUE : h1_out;
+  				esac;
+	  next(h2_out) := case
+				mode = h2 & ((h2_in1 * h2_in1_weight) + (h2_in2 * h2_in2_weight) + (h2_in3 * h2_in3_weight) + h2_bias) <= 0 : 0;
+        mode = h2 & ((h2_in1 * h2_in1_weight) + (h2_in2 * h2_in2_weight) + (h2_in3 * h2_in3_weight) + h2_bias) > 0 : ((h2_in1 * h2_in1_weight) + (h2_in2 * h2_in2_weight) + (h2_in3 * h2_in3_weight) + h2_bias);
+                TRUE : h2_out;
+  				esac;
+  	next(output) := case
+          mode = out & (h1_out_weight * h1_out) + (h2_out_weight * h2_out) + (out_bias) < 0: 0;
+          mode = out & (h1_out_weight * h1_out) + (h2_out_weight * h2_out) + (out_bias) > 100: 100;
+          mode = out : (h1_out_weight * h1_out) + (h2_out_weight * h2_out) + (out_bias);
+                TRUE : output;
+  				esac;
+
+  	init(mode) := h1;
+  	init(h1_out) := 0;
+  	init(h2_out) := 0;
+  	init(output) := 0;
+
+
+-- These two prove that changing a single weight from 4 to anything more than 4 will guarantee that the output results change
+--LTLSPEC
+--  (h1_in1 = 255 & h1_in2 = 0 & h1_in3 = 0 & h2_in1 = 255 & h2_in2 = 0 & h2_in3 = 0 &
+--  h1_out_weight > 4 & h2_out_weight = 0 & mode = done) -> F G output = 1
+
+--LTLSPEC
+--  (h1_in1 = 255 & h1_in2 = 0 & h1_in3 = 0 & h2_in1 = 255 & h2_in2 = 0 & h2_in3 = 0 & 
+--  h1_out_weight = 4 & h2_out_weight = 0 & mode = done) -> F G output = 0
+
+
+-- These three prove that changing the value of the input can impact the output, but that continuing to change it will not change the output any more (10 -> 20 changes, but 20 -> 40 does not)
+-- This can correspond with a black background where just enough blue and red light is being picked up. Maybe the background isn't 100% black (say Blue(20) and Red(10)), but there is a significant difference between Red(10) and Red(20) to say that there is definitely a dim star vs empty space
+--LTLSPEC
+--  (h1_in1 = 20 & h1_in2 = 10 & h1_in3 = 0 & h2_in1 = 20 & h2_in2 = 10 & h2_in3 = 0 & 
+--  h1_out_weight = 3 & h2_out_weight = 3 & mode = done) -> F G output = 0
+
+--LTLSPEC
+--  (h1_in1 = 20 & h1_in2 = 20 & h1_in3 = 0 & h2_in1 = 20 & h2_in2 = 20 & h2_in3 = 0 & 
+--  h1_out_weight = 3 & h2_out_weight = 3 & mode = done) -> F G output = 1
+
+--LTLSPEC
+--  (h1_in1 = 20 & h1_in2 = 40 & h1_in3 = 0 & h2_in1 = 20 & h2_in2 = 40 & h2_in3 = 0 & 
+--  h1_out_weight = 3 & h2_out_weight = 3 & mode = done) -> F G output = 1
+
+-- Plugging in some training data now in a templatized way
+INVARSPEC
+  (mode = done) -> output > 64
+
+

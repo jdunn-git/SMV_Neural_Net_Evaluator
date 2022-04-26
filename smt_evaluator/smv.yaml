@@ -1,0 +1,50 @@
+# input tags
+input_1: 200
+input_2: 0
+input_3: 20
+
+# input hidden weights
+hidden_1_input_1_weight: -1
+hidden_1_input_2_weight: 0
+hidden_1_input_3_weight: 0
+hidden_2_input_1_weight: 0
+hidden_2_input_2_weight: 0
+hidden_2_input_3_weight: 1
+
+# hidden biases
+hidden_1_bias: 1
+hidden_2_bias: 1
+
+# output
+output_bias: 1
+# With the output threshold, you can do something like stop training after having a threshold of 80 has been met
+output_threshold: 100
+output_symbol: '<'
+
+# With these differences, you can evaluate how the output shifts relative to an input shift
+input_3_difference: -5
+output_difference: -20  
+output_difference_symbol: '>'
+# In other words, when the input_3 is decreased by 5, ensure that the output doesn't decrease more than 20
+
+
+# hidden output weights
+initial_ho1_weight: 10
+initial_ho2_weight: 10
+
+
+#
+# Anything below this point should remain commented and should be entered by the python program
+#
+
+
+# hidden output weights
+#hidden_1_output_weight: 16
+#hidden_2_output_weight: 4
+
+
+
+
+
+
+
