@@ -10,7 +10,7 @@ import utils
 import numpy
 
 class NeuralNetwork:
-	def __init__(self, num_input, num_hidden, num_output):
+	def __init__(self, num_input, num_hidden, num_output, learning_rate):
 		self.ni = num_input
 		self.nh = num_hidden
 		self.no = num_output
@@ -27,6 +27,7 @@ class NeuralNetwork:
 		self.h_sums = numpy.zeros(shape=[self.nh], dtype=numpy.float32)
 		self.o_sums = numpy.zeros(shape=[self.no], dtype=numpy.float32)
 
+		self.learning_rate = learning_rate
 		self.training_iterations = 0
 
 	def set_weights(self, weights):
@@ -162,7 +163,7 @@ class NeuralNetwork:
 
 			# Try only adjusting one of the weights depending on the adjustment
 			for adj in adjustments:
-				modified_adj = adj * 0.001
+				modified_adj = adj * self.learning_rate
 				if modified_adj > 0:
 					old_weight = self.ho_weights[0, 0]
 					tmp_weight = old_weight + modified_adj

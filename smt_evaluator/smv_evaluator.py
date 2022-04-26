@@ -24,7 +24,7 @@ def main():
 
     # Create network
     print("\nCreating a 3-2-1 leaky ReLU NN")
-    nn = neural_net.NeuralNetwork(3, 2, 1)
+    nn = neural_net.NeuralNetwork(3, 2, 1, 0.001)
 
     ih_weight_1 = parsed_smt['hidden_1_input_1_weight']
     ih_weight_2 = parsed_smt['hidden_1_input_2_weight']
@@ -256,7 +256,7 @@ def main():
         count += 1
 
         # Stop gap so the loop doesn't run out of control
-        if count > 30:
+        if count > int(parsed_smt['max_training_iterations']):
             break
 
 

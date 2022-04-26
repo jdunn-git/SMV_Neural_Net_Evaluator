@@ -27,11 +27,12 @@ output_difference: -20
 output_difference_symbol: '>'
 # In other words, when the input_3 is decreased by 5, ensure that the output doesn't decrease more than 20
 
-
 # hidden output weights
 initial_ho1_weight: 10
 initial_ho2_weight: 10
 
+# Used to limit the training iterations so that it doesn't potentially run forever
+max_training_iterations: 30
 
 #
 # Anything below this point should remain commented and should be entered by the python program
