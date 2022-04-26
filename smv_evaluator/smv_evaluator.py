@@ -181,7 +181,7 @@ def main():
         # Generate two test files - one for each of the criteria
         # Generate SMV file 1
         # Read in the file
-        with open('../smt/nn.smv.template', 'r') as file:
+        with open('../smv/nn.smv.template', 'r') as file:
             filedata = file.read()
 
         # Replace the target string
@@ -189,12 +189,12 @@ def main():
             filedata = filedata.replace(f'<<{key}>>', f'{val}')
 
         # Write the file out again
-        with open('../smt/nn_1.smv', 'w') as file:
+        with open('../smv/nn_1.smv', 'w') as file:
             file.write(filedata)
 
         # Generate SMV file 2
         # Read in the file
-        with open('../smt/nn.smv.template', 'r') as file:
+        with open('../smv/nn.smv.template', 'r') as file:
             filedata = file.read()
 
         # Replace the target string
@@ -212,11 +212,11 @@ def main():
                 filedata = filedata.replace(f'<<{key}>>', f'{val}')
 
         # Write the file out again
-        with open('../smt/nn_2.smv', 'w') as file:
+        with open('../smv/nn_2.smv', 'w') as file:
             file.write(filedata)
 
         # Run nuXmv program 1
-        result = subprocess.run(["../smt/nuxmv/nuxmv.exe", "../smt/nn_1.smv"], capture_output=True, text=True)
+        result = subprocess.run(["../smv/nuxmv/nuxmv.exe", "../smv/nn_1.smv"], capture_output=True, text=True)
         nuxmv_output = result.stdout
 
         # Evaluate whether output has satisfied first criteria
@@ -228,7 +228,7 @@ def main():
             print(nuxmv_output[last_newline:])
 
             # Run nuXmv program 2
-            result = subprocess.run(["../smt/nuxmv/nuxmv.exe", "../smt/nn_2.smv"], capture_output=True, text=True)
+            result = subprocess.run(["../smv/nuxmv/nuxmv.exe", "../smv/nn_2.smv"], capture_output=True, text=True)
             nuxmv_output = result.stdout
 
             # Evaluate whether output has satisfied second criteria
