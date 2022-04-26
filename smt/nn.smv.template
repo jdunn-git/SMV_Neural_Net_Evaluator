@@ -57,31 +57,6 @@ MODULE main
   	init(h2_out) := 0;
   	init(output) := 0;
 
-
--- These two prove that changing a single weight from 4 to anything more than 4 will guarantee that the output results change
---LTLSPEC
---  (h1_in1 = 255 & h1_in2 = 0 & h1_in3 = 0 & h2_in1 = 255 & h2_in2 = 0 & h2_in3 = 0 &
---  h1_out_weight > 4 & h2_out_weight = 0 & mode = done) -> F G output = 1
-
---LTLSPEC
---  (h1_in1 = 255 & h1_in2 = 0 & h1_in3 = 0 & h2_in1 = 255 & h2_in2 = 0 & h2_in3 = 0 & 
---  h1_out_weight = 4 & h2_out_weight = 0 & mode = done) -> F G output = 0
-
-
--- These three prove that changing the value of the input can impact the output, but that continuing to change it will not change the output any more (10 -> 20 changes, but 20 -> 40 does not)
--- This can correspond with a black background where just enough blue and red light is being picked up. Maybe the background isn't 100% black (say Blue(20) and Red(10)), but there is a significant difference between Red(10) and Red(20) to say that there is definitely a dim star vs empty space
---LTLSPEC
---  (h1_in1 = 20 & h1_in2 = 10 & h1_in3 = 0 & h2_in1 = 20 & h2_in2 = 10 & h2_in3 = 0 & 
---  h1_out_weight = 3 & h2_out_weight = 3 & mode = done) -> F G output = 0
-
---LTLSPEC
---  (h1_in1 = 20 & h1_in2 = 20 & h1_in3 = 0 & h2_in1 = 20 & h2_in2 = 20 & h2_in3 = 0 & 
---  h1_out_weight = 3 & h2_out_weight = 3 & mode = done) -> F G output = 1
-
---LTLSPEC
---  (h1_in1 = 20 & h1_in2 = 40 & h1_in3 = 0 & h2_in1 = 20 & h2_in2 = 40 & h2_in3 = 0 & 
---  h1_out_weight = 3 & h2_out_weight = 3 & mode = done) -> F G output = 1
-
 -- Plugging in some training data now in a templatized way
 INVARSPEC
   (mode = done) -> output <<output_symbol>> <<output_threshold>>
