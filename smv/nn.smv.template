@@ -37,7 +37,7 @@ MODULE main
   				esac;
 	  next(h1_out) := case
 				mode = h1 & ((h1_in1 * h1_in1_weight) + (h1_in2 * h1_in2_weight) + (h1_in3 * h1_in3_weight) + h1_bias) <= 0 : 0;
-        mode = h1 & ((h1_in1 * h1_in1_weight) + (h1_in2 * h1_in2_weight) + (h1_in3 * h1_in3_weight) + h1_bias) > 500 : ((h1_in1 * h1_in1_weight) + (h1_in2 * h1_in2_weight) + (h1_in3 * h1_in3_weight) + h1_bias);
+        mode = h1 & ((h1_in1 * h1_in1_weight) + (h1_in2 * h1_in2_weight) + (h1_in3 * h1_in3_weight) + h1_bias) > 0 : ((h1_in1 * h1_in1_weight) + (h1_in2 * h1_in2_weight) + (h1_in3 * h1_in3_weight) + h1_bias);
                 TRUE : h1_out;
   				esac;
 	  next(h2_out) := case
