@@ -12,8 +12,6 @@ import yaml
 import subprocess
 
 def main():
-    # print("Begin NN with leaky ReLU IO demo")
-
     with open("smv.yaml", "r") as stream:
         try:
             parsed_smv = yaml.safe_load(stream)
@@ -23,7 +21,7 @@ def main():
             sys.exit(1)
 
     # Create network
-    print("\nCreating a 3-2-1 leaky ReLU NN")
+    print("\nCreating a 3-2-1 ReLU NN")
     nn = neural_net.NeuralNetwork(3, 2, 1, 0.001)
 
     ih_weight_1 = parsed_smv['hidden_1_input_1_weight']
