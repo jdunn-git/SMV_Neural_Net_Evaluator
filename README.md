@@ -1,4 +1,4 @@
-#SMV_Neural_Net_Evaluator
+##SMV_Neural_Net_Evaluator
 ### Description
 This repo holds code to evaluator and train a neural net in Python, as well as an smv-based representation of the neural net. This can be used to verify the results of training the neural net.
 
@@ -67,5 +67,5 @@ Given two inputs (200, 0, 20) and (200, 0, 15):
 |24|17|3|65|50|15|
 |25|17|3|65|50|15|
 
-![NN Weight Adjustments.png](/NN Weight Adjustments.png "Differences in the neural net weights over the course of training")
-![NN Output Changes and Differences.png](/NN Output Changes and Differences.png "Differences in the neural net output for the two inputs over the course of training")
+![NN Weight Adjustments.png](NN Weight Adjustments.png "Differences in the neural net weights over the course of training")
+![NN Output Changes and Differences.png](NN Output Changes and Differences.png "Differences in the neural net output for the two inputs over the course of training")
