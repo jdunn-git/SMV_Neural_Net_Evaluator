@@ -1,5 +1,6 @@
-##SMV_Neural_Net_Evaluator
-### Description
+# SMV_Neural_Net_Evaluator
+
+## Description
 This repo holds code to evaluator and train a neural net in Python, as well as an smv-based representation of the neural net. This can be used to verify the results of training the neural net.
 
 The neural net used by this repo has drawn inspiration from many sources areound the web, such as:
@@ -25,7 +26,7 @@ Inside the smt/ folder, there is a file called nn.smv.template. This stores a sm
 
 The program will continue running until either both provable criteria have been met, or until it has trained the neural net beyond a maximum threshold. This is to prevent an infinite loop, since it's entirely possible that the results of the training can't be proven against the configuration values.
 
-###Running 
+## Running 
 Prerequisites can be installed by running
 >$ pip install -r requirements.txt
 
@@ -34,7 +35,7 @@ The program can run by the command
 >$ python smv_evaluator.py
 
 
-###Evaluation Data
+## Evaluation Data
 The program with base configuration generated a neural net that will product the following data:
 Given two inputs (200, 0, 20) and (200, 0, 15):
 
@@ -67,5 +68,5 @@ Given two inputs (200, 0, 20) and (200, 0, 15):
 |24|17|3|65|50|15|
 |25|17|3|65|50|15|
 
-![NN Weight Adjustments.png](NN Weight Adjustments.png "Differences in the neural net weights over the course of training")
-![NN Output Changes and Differences.png](NN Output Changes and Differences.png "Differences in the neural net output for the two inputs over the course of training")
+![NN Weight Adjustments.png](https://github.com/jdunn-git/SMV_Neural_Net_Evaluator/blob/main/NN%20Weight%20Adjustments.png "Differences in the neural net weights over the course of training")
+![NN Output Changes and Differences.png](https://github.com/jdunn-git/SMV_Neural_Net_Evaluator/blob/main/NN%20Output%20Changes%20and%20Differences.png "Differences in the neural net output for the two inputs over the course of training")
