@@ -16,8 +16,8 @@ def main():
 
     with open("smv.yaml", "r") as stream:
         try:
-            parsed_smt = yaml.safe_load(stream)
-            print(f"Config: {parsed_smt}")
+            parsed_smv = yaml.safe_load(stream)
+            print(f"Config: {parsed_smv}")
         except yaml.YAMLError as exc:
             print(exc)
             sys.exit(1)
@@ -26,19 +26,19 @@ def main():
     print("\nCreating a 3-2-1 leaky ReLU NN")
     nn = neural_net.NeuralNetwork(3, 2, 1, 0.001)
 
-    ih_weight_1 = parsed_smt['hidden_1_input_1_weight']
-    ih_weight_2 = parsed_smt['hidden_1_input_2_weight']
-    ih_weight_3 = parsed_smt['hidden_1_input_3_weight']
-    ih_weight_4 = parsed_smt['hidden_2_input_1_weight']
-    ih_weight_5 = parsed_smt['hidden_2_input_2_weight']
-    ih_weight_6 = parsed_smt['hidden_2_input_3_weight']
+    ih_weight_1 = parsed_smv['hidden_1_input_1_weight']
+    ih_weight_2 = parsed_smv['hidden_1_input_2_weight']
+    ih_weight_3 = parsed_smv['hidden_1_input_3_weight']
+    ih_weight_4 = parsed_smv['hidden_2_input_1_weight']
+    ih_weight_5 = parsed_smv['hidden_2_input_2_weight']
+    ih_weight_6 = parsed_smv['hidden_2_input_3_weight']
 
-    hidden_bias_1 = parsed_smt['hidden_1_bias']
-    hidden_bias_2 = parsed_smt['hidden_2_bias']
-    output_bias = parsed_smt['output_bias']
+    hidden_bias_1 = parsed_smv['hidden_1_bias']
+    hidden_bias_2 = parsed_smv['hidden_2_bias']
+    output_bias = parsed_smv['output_bias']
 
-    ho_bias_1 = parsed_smt['initial_ho1_weight']
-    ho_bias_2 = parsed_smt['initial_ho2_weight']
+    ho_bias_1 = parsed_smv['initial_ho1_weight']
+    ho_bias_2 = parsed_smv['initial_ho2_weight']
 
     # Set weights and biases
     weights = numpy.array([ih_weight_1, ih_weight_2, ih_weight_3, ih_weight_4, ih_weight_5, ih_weight_6,  # ih weights
@@ -50,7 +50,7 @@ def main():
     utils.show_vec(weights, wid=6, dec=2, vals_line=8)
     nn.set_weights(weights)
 
-    input_color = [parsed_smt['input_1'], parsed_smt['input_2'], parsed_smt['input_3']]
+    input_color = [parsed_smv['input_1'], parsed_smv['input_2'], parsed_smv['input_3']]
     normalized_color = utils.generate_array_from_color(input_color)
 
     # Set input
@@ -173,9 +173,9 @@ def main():
         #
         # Compute the smt statistics from here after 20 trainings - round to an int
         #
-        parsed_smt['hidden_1_output_weight'] = round(result.nn_ho_weights[0])
-        parsed_smt['hidden_2_output_weight'] = round(result.nn_ho_weights[1])
-        # parsed_smt['output_threshold'] = 100
+        parsed_smv['hidden_1_output_weight'] = round(result.nn_ho_weights[0])
+        parsed_smv['hidden_2_output_weight'] = round(result.nn_ho_weights[1])
+        # parsed_smv['output_threshold'] = 100
         # This will use the smt to prove that the result should have been less than 100 now, given the current weights
 
         # Generate two test files - one for each of the criteria
@@ -185,7 +185,7 @@ def main():
             filedata = file.read()
 
         # Replace the target string
-        for key, val in parsed_smt.items():
+        for key, val in parsed_smv.items():
             filedata = filedata.replace(f'<<{key}>>', f'{val}')
 
         # Write the file out again
@@ -198,16 +198,16 @@ def main():
             filedata = file.read()
 
         # Replace the target string
-        for key, val in parsed_smt.items():
+        for key, val in parsed_smv.items():
             # Adjust the
             if key == 'input_3':
-                new_input_3 = str(int(parsed_smt['input_3']) + int(parsed_smt['input_3_difference']))
+                new_input_3 = str(int(parsed_smv['input_3']) + int(parsed_smv['input_3_difference']))
                 filedata = filedata.replace(f'<<{key}>>', f'{new_input_3}')
             elif key == 'output_threshold':
-                new_output_threshold = str(int(output) + int(parsed_smt['output_difference']))
+                new_output_threshold = str(int(output) + int(parsed_smv['output_difference']))
                 filedata = filedata.replace(f'<<{key}>>', f'{new_output_threshold}')
             elif key == 'output_symbol':
-                filedata = filedata.replace(f'<<{key}>>', f'{parsed_smt["output_difference_symbol"]}')
+                filedata = filedata.replace(f'<<{key}>>', f'{parsed_smv["output_difference_symbol"]}')
             else:
                 filedata = filedata.replace(f'<<{key}>>', f'{val}')
 
@@ -221,11 +221,16 @@ def main():
 
         # Evaluate whether output has satisfied first criteria
         if "Counterexample" in nuxmv_output:
-            print("Counterexample found for output threshold criteria")
+            print(f"Output Threshold check: Model checker found a counterexample while performing the" +
+                  f" output threshold criteria check.")
+            print(f"\tOutput ({output}) is NOT less than ({parsed_smv['output_threshold']})")
         else:
-            print("No counterexample found for output threshold criteria")
             last_newline = nuxmv_output[:len(nuxmv_output) - 2].rindex("\n")
             print(nuxmv_output[last_newline:])
+            print(f"Output Threshold check: Model checker found no counterexamples while performing the" +
+                  f" output threshold criteria check.")
+            print(f"\tOutput ({output}) is less than ({parsed_smv['output_threshold']})")
+            print("Moving on to robustness criteria...\n")
 
             # Run nuXmv program 2
             result = subprocess.run(["../smv/nuxmv/nuxmv.exe", "../smv/nn_2.smv"], capture_output=True, text=True)
@@ -233,15 +238,22 @@ def main():
 
             # Evaluate whether output has satisfied second criteria
             if "Counterexample" in nuxmv_output:
-                print("Counterexample for output robustness criteria")
+                print(f"Output Robustness check: Model checker found a counterexample while performing the" +
+                      f" output robustness criteria check.")
+                print(f"\t\tChanging input 3 from ({parsed_smv['input_3']}) to ({new_input_3}) WILL NOT keeps the new" +
+                      f" output within ({parsed_smv['output_difference']}) of original output ({output})")
             else:
-                print("No counterexample for output robustness criteria")
                 last_newline = nuxmv_output[:len(nuxmv_output) - 2].rindex("\n")
                 print(nuxmv_output[last_newline:])
+                print(f"Output Robustness check: Model checker found no counterexamples while performing the" +
+                      f" output robustness criteria check.")
+                print(f"\t\tChanging input 3 from ({parsed_smv['input_3']}) to ({new_input_3}) WILL keeps the new" +
+                      " output within ({parsed_smv['output_difference']}) of original output ({output})")
+                print()
 
                 # Display the output for this proven result
-                new_input_3 = str(int(parsed_smt['input_3']) + int(parsed_smt['input_3_difference']))
-                new_input_color = [parsed_smt['input_1'], parsed_smt['input_2'], new_input_3]
+                new_input_3 = str(int(parsed_smv['input_3']) + int(parsed_smv['input_3_difference']))
+                new_input_color = [parsed_smv['input_1'], parsed_smv['input_2'], new_input_3]
                 new_normalized_color = utils.generate_array_from_color(new_input_color)
 
                 output = nn.eval(new_normalized_color)[0]
@@ -257,7 +269,8 @@ def main():
         count += 1
 
         # Stop gap so the loop doesn't run out of control
-        if count > int(parsed_smt['max_training_iterations']):
+        if count > int(parsed_smv['max_training_iterations']):
+            print(f"Trained the neural net more than the maximum allowed {parsed_smv['max_training_iterations']} times")
             break
 
 
