@@ -189,8 +189,9 @@ def main():
             filedata = filedata.replace(f'<<{key}>>', f'{val}')
 
         # Write the file out again
-        with open('../smv/nn_1.smv', 'w') as file:
+        with open('../smv/nn_output.smv', 'w') as file:
             file.write(filedata)
+
 
         # Generate SMV file 2
         # Read in the file
@@ -212,11 +213,11 @@ def main():
                 filedata = filedata.replace(f'<<{key}>>', f'{val}')
 
         # Write the file out again
-        with open('../smv/nn_2.smv', 'w') as file:
+        with open('../smv/nn_robustness.smv', 'w') as file:
             file.write(filedata)
 
         # Run nuXmv program 1
-        result = subprocess.run(["../smv/nuxmv/nuxmv.exe", "../smv/nn_1.smv"], capture_output=True, text=True)
+        result = subprocess.run(["../smv/nuxmv/nuxmv.exe", "../smv/nn_output.smv"], capture_output=True, text=True)
         nuxmv_output = result.stdout
 
         # Evaluate whether output has satisfied first criteria
@@ -233,7 +234,7 @@ def main():
             print("Moving on to robustness criteria...\n")
 
             # Run nuXmv program 2
-            result = subprocess.run(["../smv/nuxmv/nuxmv.exe", "../smv/nn_2.smv"], capture_output=True, text=True)
+            result = subprocess.run(["../smv/nuxmv/nuxmv.exe", "../smv/nn_robustness.smv"], capture_output=True, text=True)
             nuxmv_output = result.stdout
 
             # Evaluate whether output has satisfied second criteria
@@ -248,7 +249,7 @@ def main():
                 print(f"Output Robustness check: Model checker found no counterexamples while performing the" +
                       f" output robustness criteria check.")
                 print(f"\t\tChanging input 3 from ({parsed_smv['input_3']}) to ({new_input_3}) WILL keeps the new" +
-                      " output within ({parsed_smv['output_difference']}) of original output ({output})")
+                      f" output within ({parsed_smv['output_difference']}) of original output ({output})")
                 print()
 
                 # Display the output for this proven result
