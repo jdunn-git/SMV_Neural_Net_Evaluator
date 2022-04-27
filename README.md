@@ -26,7 +26,7 @@ Inside the smt/ folder, there is a file called nn.smv.template. This stores a sm
 
 The program will continue running until either both provable criteria have been met, or until it has trained the neural net beyond a maximum threshold. This is to prevent an infinite loop, since it's entirely possible that the results of the training can't be proven against the configuration values.
 
-![NN SMV Sequence Diagram.png](https://github.com/jdunn-git/SMV_Neural_Net_Evaluator/blob/main/NN%20SMV%20Sequence%20Diagram.png "Sequence diagram of the smv_evaluator program")
+![NN SMV Sequence Diagram.png](https://github.com/jdunn-git/SMV_Neural_Net_Evaluator/blob/main/NN%20SMV%20Sequence%20Diagram%20(transparent).png "Sequence diagram of the smv_evaluator program")
 
 ## Running 
 Prerequisites can be installed by running
