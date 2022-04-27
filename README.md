@@ -32,6 +32,7 @@ Prerequisites can be installed by running
 
 The program can run by the command
 >$ cd smv_evaluator/
+>
 >$ python smv_evaluator.py
 
 
