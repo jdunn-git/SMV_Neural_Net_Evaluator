@@ -1,7 +1,7 @@
 # SMV_Neural_Net_Evaluator
 
 ## Description
-This repo holds code to evaluator and train a neural net in Python, as well as an smv-based representation of the neural net. This can be used to verify the results of training the neural net.
+This repo holds code to evaluator and train a neural net in Python, as well as an smv-based representation of the neural net. This can be used to verify the results of training the neural net. Please note that this is verifying for robustness, not validating for correctness.
 
 The neural net used by this repo has drawn inspiration from many sources areound the web, such as:
 
